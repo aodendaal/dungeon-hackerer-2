@@ -26,10 +26,8 @@ public class SimpleSmack : MonoBehaviour
 
         if (monster != null)
         {
-            GameInfo.instance.Log("Smack");
-            experience += 100;
-            experienceText.text = $"Experience: {experience}";
-
+            var component = monster.GetComponent<MonsterHit>();
+            component.GetHit();
         }
     }
 }
