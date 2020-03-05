@@ -21,6 +21,21 @@ public class MonsterController : MonoBehaviour
 
     public void Initialize()
     {
+        DestroyOldMonsters();
+
+        GenerateMonsters();
+    }
+
+    private void DestroyOldMonsters()
+    {
+        foreach (var monster in Monsters)
+        {
+            Destroy(monster);
+        }
+    }
+
+    private void GenerateMonsters()
+    {
         Monsters = new List<GameObject>();
 
         var openCells = LevelController.instance.Map.GetAllCells().Where(c => c.IsWalkable).ToArray();
@@ -29,6 +44,7 @@ public class MonsterController : MonoBehaviour
             var walkable = openCells[Random.Range(0, openCells.Length)];
 
             var monster = Instantiate(monsterPrefab, new Vector3(walkable.X, 0, walkable.Y), Quaternion.identity);
+            monster.name = $"{monster.name} - Level {GameController.level}";
             monster.transform.SetParent(parentTransform);
 
             Monsters.Add(monster);

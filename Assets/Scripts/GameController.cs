@@ -5,15 +5,34 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     [HideInInspector]
+    public static GameController instance;
+
+    [HideInInspector]
     public static bool IsPaused = false;
+
+    [HideInInspector]
+    public static int level = 0;
 
     [Header("Panels")]
     public GameObject gamePanel;
     public GameObject pausePanel;
 
+    private void Awake()
+    {
+        instance = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
+        LoadLevel();
+    }
+
+    public void LoadLevel()
+    {
+        level++;
+        GameInfo.instance.Log($"Teleported to Level {level}");
+
         gamePanel.SetActive(true);
         pausePanel.SetActive(false);
 
