@@ -6,9 +6,16 @@ public class SimpleMove : MonoBehaviour
 {
     public TMP_Text positionText;
 
+    private bool isMoving = false;
+
     // Update is called once per frame
     private void Update()
     {
+        if (isMoving)
+        {
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Keypad8))
         {
             var newPos = transform.position + transform.forward;
@@ -16,8 +23,13 @@ public class SimpleMove : MonoBehaviour
 
             if (LevelController.instance.IsWalkable(newPos))
             {
-                transform.position = newPos;
-                ShowLocation();
+                isMoving = true;
+
+                LeanTween.move(gameObject, newPos, 0.1f).setOnComplete(() =>
+                {
+                    ShowLocation();
+                    isMoving = false;
+                });
             }
             else
             {
@@ -32,8 +44,12 @@ public class SimpleMove : MonoBehaviour
 
             if (LevelController.instance.IsWalkable(newPos))
             {
-                transform.position = newPos;
-                ShowLocation();
+                isMoving = true;
+                LeanTween.move(gameObject, newPos, 0.1f).setOnComplete(() =>
+                {
+                    ShowLocation();
+                    isMoving = false;
+                });
             }
             else
             {
@@ -48,8 +64,12 @@ public class SimpleMove : MonoBehaviour
 
             if (LevelController.instance.IsWalkable(newPos))
             {
-                transform.position = newPos;
-                ShowLocation();
+                isMoving = true;
+                LeanTween.move(gameObject, newPos, 0.1f).setOnComplete(() =>
+                {
+                    ShowLocation();
+                    isMoving = false;
+                });
             }
             else
             {
@@ -64,8 +84,12 @@ public class SimpleMove : MonoBehaviour
 
             if (LevelController.instance.IsWalkable(newPos))
             {
-                transform.position = newPos;
-                ShowLocation();
+                isMoving = true;
+                LeanTween.move(gameObject, newPos, 0.1f).setOnComplete(() =>
+                {
+                    ShowLocation();
+                    isMoving = false;
+                });
             }
             else
             {
@@ -75,14 +99,26 @@ public class SimpleMove : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.Keypad7))
         {
-            transform.Rotate(new Vector3(0, -90f, 0));
-            ShowLocation();
+            isMoving = true;
+            LeanTween.rotateAround(gameObject, Vector3.up, -90f, 0.2f).setOnComplete(() =>
+            {
+                ShowLocation();
+                isMoving = false;
+            });
+            //transform.Rotate(new Vector3(0, -90f, 0));
+            //ShowLocation();
         }
 
         if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.Keypad9))
         {
-            transform.Rotate(new Vector3(0, 90f, 0));
-            ShowLocation();
+            isMoving = true;
+            LeanTween.rotateAround(gameObject, Vector3.up, 90f, 0.2f).setOnComplete(() =>
+            {
+                ShowLocation();
+                isMoving = false;
+            });
+            //transform.Rotate(new Vector3(0, 90f, 0));
+            //ShowLocation();
         }
     }
 
@@ -98,6 +134,9 @@ public class SimpleMove : MonoBehaviour
 
     public void PlacePlayer()
     {
+        LeanTween.cancel(gameObject);
+        isMoving = false;
+
         var walkable = LevelController.instance.Map.GetAllCells().Where(c => c.IsWalkable).ToList();
         var monsterPositions = MonsterController.instance.Monsters.Select(m => m.transform.position);
         walkable.RemoveAll(c => monsterPositions.Any(m => m.x == c.X && m.z == c.Y));
