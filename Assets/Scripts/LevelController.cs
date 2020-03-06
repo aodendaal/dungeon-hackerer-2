@@ -12,7 +12,7 @@ public class LevelController : MonoBehaviour
 
     public Transform levelParent;
     [Header("Prefabs")]
-    public GameObject wallPrefab;
+    public GameObject[] wallPrefabs;
     public GameObject[] floorPropPrefabs;
     public GameObject[] wallPropPrefabs;
     public GameObject exitPrefab;
@@ -56,7 +56,7 @@ public class LevelController : MonoBehaviour
         {
             if (!cell.IsWalkable)
             {
-                var go = Instantiate(wallPrefab, new Vector3(cell.X, 0f, cell.Y), Quaternion.identity);
+                var go = Instantiate(wallPrefabs[Random.Range(0, wallPrefabs.Length)], new Vector3(cell.X, 0f, cell.Y), Quaternion.identity);
                 go.transform.SetParent(levelParent);
                 go.name = $"Wall - Level {GameController.level} - ({cell.X}, {cell.Y})";
             }

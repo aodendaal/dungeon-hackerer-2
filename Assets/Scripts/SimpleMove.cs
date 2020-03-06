@@ -18,107 +18,133 @@ public class SimpleMove : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Keypad8))
         {
-            var newPos = transform.position + transform.forward;
-            newPos = new Vector3(Mathf.RoundToInt(newPos.x), 0f, Mathf.RoundToInt(newPos.z));
-
-            if (LevelController.instance.IsWalkable(newPos))
-            {
-                isMoving = true;
-
-                LeanTween.move(gameObject, newPos, 0.1f).setOnComplete(() =>
-                {
-                    ShowLocation();
-                    isMoving = false;
-                });
-            }
-            else
-            {
-                GameInfo.instance.Log($"Bump");
-            }
+            MoveForward();
         }
 
         if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.Keypad2))
         {
-            var newPos = transform.position - transform.forward;
-            newPos = new Vector3(Mathf.RoundToInt(newPos.x), 0f, Mathf.RoundToInt(newPos.z));
-
-            if (LevelController.instance.IsWalkable(newPos))
-            {
-                isMoving = true;
-                LeanTween.move(gameObject, newPos, 0.1f).setOnComplete(() =>
-                {
-                    ShowLocation();
-                    isMoving = false;
-                });
-            }
-            else
-            {
-                GameInfo.instance.Log("Bump");
-            }
+            MoveBackward();
         }
 
         if (Input.GetKeyDown(KeyCode.Keypad6))
         {
-            var newPos = transform.position + transform.right;
-            newPos = new Vector3(Mathf.RoundToInt(newPos.x), 0f, Mathf.RoundToInt(newPos.z));
-
-            if (LevelController.instance.IsWalkable(newPos))
-            {
-                isMoving = true;
-                LeanTween.move(gameObject, newPos, 0.1f).setOnComplete(() =>
-                {
-                    ShowLocation();
-                    isMoving = false;
-                });
-            }
-            else
-            {
-                GameInfo.instance.Log("Bump");
-            }
+            MoveRight();
         }
 
         if (Input.GetKeyDown(KeyCode.Keypad4))
         {
-            var newPos = transform.position - transform.right;
-            newPos = new Vector3(Mathf.RoundToInt(newPos.x), 0f, Mathf.RoundToInt(newPos.z));
-
-            if (LevelController.instance.IsWalkable(newPos))
-            {
-                isMoving = true;
-                LeanTween.move(gameObject, newPos, 0.1f).setOnComplete(() =>
-                {
-                    ShowLocation();
-                    isMoving = false;
-                });
-            }
-            else
-            {
-                GameInfo.instance.Log("Bump");
-            }
+            MoveLeft();
         }
 
         if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.Keypad7))
         {
-            isMoving = true;
-            LeanTween.rotateAround(gameObject, Vector3.up, -90f, 0.2f).setOnComplete(() =>
-            {
-                ShowLocation();
-                isMoving = false;
-            });
-            //transform.Rotate(new Vector3(0, -90f, 0));
-            //ShowLocation();
+            TurnLeft();
         }
 
         if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.Keypad9))
         {
+            TurnRight();
+        }
+    }
+
+    private void TurnRight()
+    {
+        isMoving = true;
+        LeanTween.rotateAround(gameObject, Vector3.up, 90f, 0.2f).setOnComplete(() =>
+        {
+            ShowLocation();
+            isMoving = false;
+        });
+    }
+
+    private void TurnLeft()
+    {
+        isMoving = true;
+        LeanTween.rotateAround(gameObject, Vector3.up, -90f, 0.2f).setOnComplete(() =>
+        {
+            ShowLocation();
+            isMoving = false;
+        });
+    }
+
+    private void MoveLeft()
+    {
+        var newPos = transform.position - transform.right;
+        newPos = new Vector3(Mathf.RoundToInt(newPos.x), 0f, Mathf.RoundToInt(newPos.z));
+
+        if (LevelController.instance.IsWalkable(newPos))
+        {
             isMoving = true;
-            LeanTween.rotateAround(gameObject, Vector3.up, 90f, 0.2f).setOnComplete(() =>
+            LeanTween.move(gameObject, newPos, 0.1f).setOnComplete(() =>
             {
                 ShowLocation();
                 isMoving = false;
             });
-            //transform.Rotate(new Vector3(0, 90f, 0));
-            //ShowLocation();
+        }
+        else
+        {
+            GameInfo.instance.Log("Bump");
+        }
+    }
+
+    private void MoveRight()
+    {
+        var newPos = transform.position + transform.right;
+        newPos = new Vector3(Mathf.RoundToInt(newPos.x), 0f, Mathf.RoundToInt(newPos.z));
+
+        if (LevelController.instance.IsWalkable(newPos))
+        {
+            isMoving = true;
+            LeanTween.move(gameObject, newPos, 0.1f).setOnComplete(() =>
+            {
+                ShowLocation();
+                isMoving = false;
+            });
+        }
+        else
+        {
+            GameInfo.instance.Log("Bump");
+        }
+    }
+
+    private void MoveBackward()
+    {
+        var newPos = transform.position - transform.forward;
+        newPos = new Vector3(Mathf.RoundToInt(newPos.x), 0f, Mathf.RoundToInt(newPos.z));
+
+        if (LevelController.instance.IsWalkable(newPos))
+        {
+            isMoving = true;
+            LeanTween.move(gameObject, newPos, 0.1f).setOnComplete(() =>
+            {
+                ShowLocation();
+                isMoving = false;
+            });
+        }
+        else
+        {
+            GameInfo.instance.Log("Bump");
+        }
+    }
+
+    private void MoveForward()
+    {
+        var newPos = transform.position + transform.forward;
+        newPos = new Vector3(Mathf.RoundToInt(newPos.x), 0f, Mathf.RoundToInt(newPos.z));
+
+        if (LevelController.instance.IsWalkable(newPos))
+        {
+            isMoving = true;
+
+            LeanTween.move(gameObject, newPos, 0.1f).setOnComplete(() =>
+            {
+                ShowLocation();
+                isMoving = false;
+            });
+        }
+        else
+        {
+            GameInfo.instance.Log($"Bump");
         }
     }
 
@@ -146,4 +172,38 @@ public class SimpleMove : MonoBehaviour
 
         ShowLocation();
     }
+
+    #region Button Clicks
+
+    public void MoveLeftButton_Click()
+    {
+        MoveLeft();
+    }
+
+    public void MoveRightButton_Click()
+    {
+        MoveRight();
+    }
+
+    public void MoveForwardButton_Click()
+    {
+        MoveForward();
+    }
+
+    public void MoveBackardButton_Click()
+    {
+        MoveBackward();
+    }
+
+    public void TurnLeftButton_Click()
+    {
+        TurnLeft();
+    }
+
+    public void TurnRightButton_Click()
+    {
+        TurnRight();
+    }
+
+    #endregion
 }

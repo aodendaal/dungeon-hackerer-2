@@ -40,7 +40,6 @@ public class GameController : MonoBehaviour
         MonsterController.instance.Initialize();
 
         var player = GameObject.FindGameObjectWithTag("Player");
-        LeanTween.cancel(player);
         player.GetComponent<SimpleMove>().PlacePlayer();
         player.transform.GetChild(1).GetComponent<ParticleSystem>().Play();
     }
