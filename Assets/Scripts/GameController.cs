@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 public class GameController : MonoBehaviour
 {
@@ -31,6 +32,7 @@ public class GameController : MonoBehaviour
     public void LoadLevel()
     {
         level++;
+        AnalyticsEvent.LevelStart(level);
         GameInfo.instance.Log($"Teleported to Level {level}");
 
         gamePanel.SetActive(true);
