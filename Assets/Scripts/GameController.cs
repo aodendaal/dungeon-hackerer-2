@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Analytics;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -31,19 +33,26 @@ public class GameController : MonoBehaviour
 
     public void LoadLevel()
     {
-        level++;
-        AnalyticsEvent.LevelStart(level);
-        GameInfo.instance.Log($"Teleported to Level {level}");
+        try
+        {
+            level++;
+            AnalyticsEvent.LevelStart(level);
+            GameInfo.instance.Log($"Teleported to Level {level}");
 
-        gamePanel.SetActive(true);
-        pausePanel.SetActive(false);
+            gamePanel.SetActive(true);
+            pausePanel.SetActive(false);
 
-        LevelController.instance.Initialize();
-        MonsterController.instance.Initialize();
+            LevelController.instance.Initialize();
+            MonsterController.instance.Initialize();
 
-        var player = GameObject.FindGameObjectWithTag("Player");
-        player.GetComponent<SimpleMove>().PlacePlayer();
-        player.transform.GetChild(1).GetComponent<ParticleSystem>().Play();
+            var player = GameObject.FindGameObjectWithTag("Player");
+            player.GetComponent<SimpleMove>().PlacePlayer();
+            player.transform.GetChild(1).GetComponent<ParticleSystem>().Play();
+        }
+        catch (Exception ex)
+        {
+            GameInfo.instance.Log(ex.Message);
+        }
     }
 
     // Update is called once per frame
@@ -57,21 +66,35 @@ public class GameController : MonoBehaviour
 
     public void QuitButton_Click()
     {
+        AnalyticsEvent.GameOver();
+
+#if UNITY_WEBGL
+        SceneManager.LoadScene(0);
+#else
         Application.Quit();
+#endif
+    }
+
+    public void ResumeButton_Click()
+    {
+        gamePanel.SetActive(true);
+        pausePanel.SetActive(false);
+
+        IsPaused = false;
     }
 
     private void Pause()
     {
         if (!IsPaused)
         {
-            gamePanel.SetActive(false);
+            //gamePanel.SetActive(false);
             pausePanel.SetActive(true);
 
             IsPaused = true;
         }
         else
         {
-            gamePanel.SetActive(true);
+            ///gamePanel.SetActive(true);
             pausePanel.SetActive(false);
 
             IsPaused = false;

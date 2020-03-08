@@ -11,6 +11,11 @@ public class SimpleMove : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if (GameController.IsPaused)
+        {
+            return;
+        }
+
         if (isMoving)
         {
             return;

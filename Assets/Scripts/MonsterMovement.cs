@@ -17,6 +17,11 @@ public class MonsterMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameController.IsPaused)
+        {
+            return;
+        }
+
         if (Time.time > moveTime)
         {
             var options = new List<Vector3>();

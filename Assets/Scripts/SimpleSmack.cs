@@ -12,6 +12,11 @@ public class SimpleSmack : MonoBehaviour
 
     private void Update()
     {
+        if (GameController.IsPaused)
+        {
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             AttackButton_Click();
